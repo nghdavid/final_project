@@ -93,5 +93,3 @@ if __name__ == '__main__':
             print(movie)
         with open('movie.json', 'w', encoding='utf-8') as f:
             json.dump(movies, f, indent=2, sort_keys=True, ensure_ascii=False)
-
-print('Hello')
