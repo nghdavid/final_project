@@ -23,7 +23,7 @@ match = 0
 for i in range(1, len(sheetValue)):
     if i == len(sheetValue) - 1:
         sheet.append_row(newMovie)
-    if newMovie[1] == sheetValue[i][1] and newMovie[2] == sheetValue[i][2]:
+    if newMovie[1] == sheetValue[i][1] and newMovie[2] == sheetValue[i][2] and newMovie[3] == sheetValue[i][3]:
         matchPartner.append(newMovie)
         matchPartner.append(sheetValue[i])
         sheet.delete_row(i + 1)
@@ -57,7 +57,7 @@ if match == 1:
 	d.send_keys('配對成功')
 	driver.implicitly_wait(1)
 	e = driver.find_element_by_xpath("//*[@class='Am Al editable LW-avf']")
-	e.send_keys('恭喜您配對成功，您的電影為' + matchPartner[0][1] + '，時間為' + matchPartner[0][2] + '，地區為' + matchPartner[0][3] + '。')
+	e.send_keys('恭喜您與暱稱' + matchPartner[1][4] + ' ' + matchPartner[1][0] + '配對成功，您欲觀賞的電影為' + matchPartner[0][1] + '，時間為' + matchPartner[0][2] + '，地區為' + matchPartner[0][3] + '。')
 	driver.implicitly_wait(1)
 	f = driver.find_element_by_xpath("//*[@class='T-I J-J5-Ji aoO v7 T-I-atl L3']")
 	f.click()
@@ -72,7 +72,7 @@ if match == 1:
 	d.send_keys('配對成功')
 	driver.implicitly_wait(1)
 	e = driver.find_element_by_xpath("//*[@class='Am Al editable LW-avf']")
-	e.send_keys('恭喜您配對成功，您的電影為' + matchPartner[1][1] + '，時間為' + matchPartner[1][2] + '，地區為' + matchPartner[1][3] + '。')
+	e.send_keys('恭喜您與暱稱' + matchPartner[0][4] + ' ' + matchPartner[0][0] + '配對成功，您欲觀賞的電影為' + matchPartner[1][1] + '，時段為' + matchPartner[1][2] + '，地區為' + matchPartner[1][3] + '。')
 	driver.implicitly_wait(1)
 	f = driver.find_element_by_xpath("//*[@class='T-I J-J5-Ji aoO v7 T-I-atl L3']")
 	f.click()
