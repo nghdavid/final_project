@@ -9,25 +9,18 @@ gss_client = gspread.authorize(credentials)
 spreadsheet_key = '1jew8de4bvuBUaw6Fdd12lUh6qVWF7UGST9oZevefhNk' 
 sheet = gss_client.open_by_key(spreadsheet_key).sheet1
 # Google Sheet 資料表
-listdata=input().split(',')
-# for i in range(9):
-sheet.append_row(listdata)  # 資料內容
+newMovie = input().split(',')
 sheetValue = sheet.get_all_values()
 matchPartner = []
 for i in range(1, len(sheetValue)):
-    if matchPartner == []:
+    if i == len(sheetValue) - 1:
+        sheet.append_row(newMovie)
+    if newMovie[1] == sheetValue[i][1] and newMovie[2] == sheetValue[i][2]:
+        matchPartner.append(newMovie)
         matchPartner.append(sheetValue[i])
+        sheet.delete_row(i + 1)
+        break
     else:
-        for j in range(len(matchPartner)):
-            if sheetValue[i][2] == matchPartner[j][2] and sheetValue[i][1] == matchPartner[j][1]:
-                matchPartner.append(sheetValue[i])
-
+        continue
+    
 print(matchPartner)
-# for i in range(len(sheetValue)):
-#     if len(sheetValue) == 1:
-#         break
-#     print(sheetValue[1][0])
-#     print(sheetValue)
-#     sheetValue.pop(1)
-        
-        # sheetValue.pop(i)
