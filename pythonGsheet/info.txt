@@ -1,0 +1,11 @@
+姓名	電影	時間
+John	銀翼殺手	13:50
+Lisa	Rocky	14:50
+Eric	王牌冤家	15:50
+Cathy	侏儸紀公園	16:50
+Sia	王牌冤家	17:50
+Mark	銀翼殺手	18:50
+Teresa	Rocky	19:50
+Yumi	侏儸紀公園	20:50
+Neo	銀翼殺手	21:50
+Danny	金剛	22:50
