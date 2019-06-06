@@ -12,7 +12,7 @@ from requests_html import HTMLSession
 
 
 # It takes a yahoo website as input
-# It returns a panda dataframe that contains lists of Chinese names and English names and schedule websites  
+# It returns a panda dataframe that contains lists of Chinese names and English names and schedule websites and movie websites and introductions
 def yahooMovieParser(url):
     r = requests.get(url)
     web_content = r.text
@@ -27,19 +27,29 @@ def yahooMovieParser(url):
         except:
             links.append(0)
     
+    
     # 中英文片名
     newMovie2 = soup.find_all('div', class_ = "release_movie_name")
     NameCHs = [t.find('a', class_='gabtn').text.replace('\n','').replace(' ','') for t in newMovie2]
     NameENs = [t.find('div', class_='en').find('a').text.replace('\n','').replace(' ','') for t in newMovie2]
     
+    #Movie website
+    websites = [t.find('a', class_='gabtn')['href'] for t in newMovie2]
+    
+    # 電影介紹
+    newMovie4 = soup.find_all('div',class_="release_text")
+    Intros = [t.find('span').text.replace('\n','').replace('\r','').replace('\xa0','').replace(' ','') for t in newMovie4]
     #合併成data frame
     df = pd.DataFrame(
     {
         'Name':NameCHs,
         'EnName':NameENs,
-        'time': links
+        'time': links,
+        'Intro': Intros,
+        'Web': websites
     })
     return df
+
 #A function that take website as input
 #It returns next webpage
 def getNext(url):
@@ -52,6 +62,7 @@ def getNext(url):
         return tagA['href']
     else:
         return None
+    
 #A function that take schedule website as input
 #It returns a dictionary that store time
 def get_schedule(html):
@@ -71,7 +82,37 @@ def get_schedule(html):
         
         schedule[city] = theater_schedule
     return schedule
-        
+
+#Input 為 電影的主頁
+#Output 為 電影種類 imdb分數 上映日期 電影長度
+#如果查不到 imdb，就回傳 電影種類 -1 上映日期 電影長度
+def get_type(time_url):
+    #進到網頁拿html
+    r = requests.get(time_url)
+    web_content = r.text
+    soup = BeautifulSoup(web_content,'lxml')
+    info = soup.find('div', class_='level_name')
+    info1 = soup.find_all('span')
+    types = info.text.replace('\n','').replace(' ','')
+    types = types.split('/')
+    
+    has_imdb = 0#有無imdb
+    for i in info1:
+        if i.text[0:4] == 'IMDb':
+            imdb = float(i.text[7:-1]+i.text[-1])
+            has_imdb = 1
+        if i.text[0:4] == '上映日期':
+            date = i.text[5:-1]+i.text[-1]
+        if len(i.text)>0:
+            if i.text[0] == '片':
+                length = i.text[6:-1]+i.text[-1]
+    if has_imdb:
+        return types,imdb,date,length
+    else:
+        return types,-1,date,length
+    
+
+
 url = 'http://movies.yahoo.com.tw/movie_intheaters.html'
 urlList = []
  
@@ -79,7 +120,7 @@ while url:
     urlList.append(url)
     url = getNext(url)
 
-#Get Chinese names and English names and schedule websites 
+#Get Chinese names and English names and schedule websites and movie websties and introductions
 MovieInfo = None
 for url in urlList:
     d1 = yahooMovieParser(url)
@@ -102,12 +143,33 @@ for time_url in MovieInfo['time']:
     schedules.append(get_schedule(r.html))
 MovieInfo['schedule'] = schedules
 
- 
+#爬 電影種類 imdb分數 上映日期 電影長度
+types = []
+imdbs = []
+dates = []
+lengths = []
+for time_url in MovieInfo['Web']:
+    type,imdb,date,length = get_type(time_url)
+    types.append(type)
+    ################################
+    imdbs.append(imdb)#請注意，如果imdb為-1這代表查不到imdb
+    ################################
+    dates.append(date)
+    lengths.append(length)
+#併到dataframe
+MovieInfo['type'] = types
+MovieInfo['imdb'] = imdbs
+MovieInfo['release_date'] = dates
+MovieInfo['length'] = lengths
+
 
 for i in range(len(MovieInfo)):
     print(MovieInfo['Name'][i])  
-    print(MovieInfo['EnName'][i])
-    print(MovieInfo['schedule'][i])
+    print(MovieInfo['type'][i])
+    print(MovieInfo['imdb'][i])
+    print(MovieInfo['release_date'][i])
+    print(MovieInfo['length'][i])
+    print()
 
 
 
