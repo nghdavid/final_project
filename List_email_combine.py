@@ -58,8 +58,8 @@ if match == 1:
     d.send_keys('配對成功')
     driver.implicitly_wait(1)
     e = driver.find_element_by_xpath("//*[@class='Am Al editable LW-avf']")
-    e.send_keys('恭喜您與暱稱' + matchPartner[1][4] + ' ' + matchPartner[1][0] + ' 配對成功，您欲觀賞的電影為' +
-                matchPartner[0][1] + '，時間為' + matchPartner[0][2] + '，地區為' + matchPartner[0][3] + '。' + '\n祝你們觀影愉快~')
+    e.send_keys('恭喜您與暱稱 ' + matchPartner[1][4] + ' ' + matchPartner[1][0] + ' 配對成功，您欲觀賞的電影為' +
+                matchPartner[0][1] + '，時間為' + matchPartner[0][2] + '，地區為' + matchPartner[0][3] + '。' + '\n祝你們觀影愉快~' + '\n「' + matchPartner[1][5] + '」')
     driver.implicitly_wait(1)
     f = driver.find_element_by_xpath(
         "//*[@class='T-I J-J5-Ji aoO v7 T-I-atl L3']")
@@ -75,8 +75,8 @@ if match == 1:
     d.send_keys('配對成功')
     driver.implicitly_wait(1)
     e = driver.find_element_by_xpath("//*[@class='Am Al editable LW-avf']")
-    e.send_keys('恭喜您與暱稱' + matchPartner[0][4] + ' ' + matchPartner[0][0] + ' 配對成功，您欲觀賞的電影為' +
-                matchPartner[1][1] + '，時段為' + matchPartner[1][2] + '，地區為' + matchPartner[1][3] + '。' + '\n祝你們觀影愉快~')
+    e.send_keys('恭喜您與暱稱 ' + matchPartner[0][4] + ' ' + matchPartner[0][0] + ' 配對成功，您欲觀賞的電影為' +
+                matchPartner[1][1] + '，時段為' + matchPartner[1][2] + '，地區為' + matchPartner[1][3] + '。' + '\n祝你們觀影愉快~' + '\n「' + matchPartner[0][5] + '」')
     driver.implicitly_wait(1)
     f = driver.find_element_by_xpath(
         "//*[@class='T-I J-J5-Ji aoO v7 T-I-atl L3']")
