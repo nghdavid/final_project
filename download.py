@@ -12,7 +12,7 @@ from requests_html import HTMLSession
 
 
 # It takes a yahoo website as input
-# It returns a panda dataframe that contains lists of Chinese names and English names and schedule websites and movie websites and introductions
+# It returns a panda dataframe that contains lists of Chinese names and English names and schedule websites  
 def yahooMovieParser(url):
     r = requests.get(url)
     web_content = r.text
@@ -27,29 +27,19 @@ def yahooMovieParser(url):
         except:
             links.append(0)
     
-    
     # 中英文片名
     newMovie2 = soup.find_all('div', class_ = "release_movie_name")
     NameCHs = [t.find('a', class_='gabtn').text.replace('\n','').replace(' ','') for t in newMovie2]
     NameENs = [t.find('div', class_='en').find('a').text.replace('\n','').replace(' ','') for t in newMovie2]
     
-    #Movie website
-    websites = [t.find('a', class_='gabtn')['href'] for t in newMovie2]
-    
-    # 電影介紹
-    newMovie4 = soup.find_all('div',class_="release_text")
-    Intros = [t.find('span').text.replace('\n','').replace('\r','').replace('\xa0','').replace(' ','') for t in newMovie4]
     #合併成data frame
     df = pd.DataFrame(
     {
         'Name':NameCHs,
         'EnName':NameENs,
-        'time': links,
-        'Intro': Intros,
-        'Web': websites
+        'time': links
     })
     return df
-
 #A function that take website as input
 #It returns next webpage
 def getNext(url):
@@ -62,7 +52,6 @@ def getNext(url):
         return tagA['href']
     else:
         return None
-    
 #A function that take schedule website as input
 #It returns a dictionary that store time
 def get_schedule(html):
@@ -82,6 +71,7 @@ def get_schedule(html):
         
         schedule[city] = theater_schedule
     return schedule
+<<<<<<< HEAD
 
 #Input 為 電影的主頁
 #Output 為 電影種類 imdb分數 上映日期 電影長度 電影圖片網址
@@ -113,6 +103,9 @@ def get_type(time_url):
     
 
 
+=======
+        
+>>>>>>> parent of 1e91d08... Increase download.py function
 url = 'http://movies.yahoo.com.tw/movie_intheaters.html'
 urlList = []
  
@@ -120,7 +113,7 @@ while url:
     urlList.append(url)
     url = getNext(url)
 
-#Get Chinese names and English names and schedule websites and movie websties and introductions
+#Get Chinese names and English names and schedule websites 
 MovieInfo = None
 for url in urlList:
     d1 = yahooMovieParser(url)
@@ -143,6 +136,7 @@ for time_url in MovieInfo['time']:
     schedules.append(get_schedule(r.html))
 MovieInfo['schedule'] = schedules
 
+<<<<<<< HEAD
 #爬 電影種類 imdb分數 上映日期 電影長度 電影圖片網址
 types = []
 imdbs = []
@@ -174,6 +168,14 @@ for i in range(len(MovieInfo)):
     print(MovieInfo['length'][i])
     print(MovieInfo['photo_website'][i])
     print()
+=======
+ 
+
+for i in range(len(MovieInfo)):
+    print(MovieInfo['Name'][i])  
+    print(MovieInfo['EnName'][i])
+    print(MovieInfo['schedule'][i])
+>>>>>>> parent of 1e91d08... Increase download.py function
 
 
 
