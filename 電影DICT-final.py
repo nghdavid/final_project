@@ -129,19 +129,7 @@ for url in urlList:
     else:
         MovieInfo = MovieInfo.append(d1,ignore_index=True)
 
-#
-#Get schedules
-schedules = []
-for time_url in MovieInfo['time']:
-    if time_url == 0:
-        schedule = 0
-        schedules.append(schedule)
-        continue
-    session = HTMLSession()
-    r = session.get(time_url)
-    r.html.render()
-    schedules.append(get_schedule(r.html))
-MovieInfo['schedule'] = schedules
+
 
 #爬 電影種類 imdb分數 上映日期 電影長度 電影圖片網址
 types = []
@@ -164,6 +152,21 @@ MovieInfo['imdb'] = imdbs
 MovieInfo['release_date'] = dates
 MovieInfo['length'] = lengths
 MovieInfo['photo_website'] = photos#電影圖片網址
+#
+#Get schedules
+#schedules = []
+#for time_url in MovieInfo['time']:
+#    if time_url == 0:
+#        schedule = 0
+#        schedules.append(schedule)
+#        continue
+#    session = HTMLSession()
+#    r = session.get(time_url)
+#    r.html.render()
+#    schedules.append(get_schedule(r.html))
+#MovieInfo['schedule'] = schedules
+
+
 
 """
 for i in range(len(MovieInfo)):
@@ -200,7 +203,7 @@ for j in Movielist:
 	Moviedict[j].append(MovieInfo['length'][Count])              #長度
 	Moviedict[j].append(MovieInfo['imdb'][Count])       #IMDB分數
 	Moviedict[j].append(MovieInfo['Intro'][Count])      #簡介
-	Moviedict[j].append(MovieInfo['schedule'][Count])   #時間表
+	#Moviedict[j].append(MovieInfo['schedule'][Count])   #時間表
 	Moviedict[j].append(MovieInfo['photo_website'][Count])   #圖片網址
 	
 
