@@ -84,8 +84,8 @@ def get_schedule(html):
     return schedule
 
 #Input 為 電影的主頁
-#Output 為 電影種類 imdb分數 上映日期 電影長度
-#如果查不到 imdb，就回傳 電影種類 -1 上映日期 電影長度
+#Output 為 電影種類 imdb分數 上映日期 電影長度 電影圖片網址
+#如果查不到 imdb，就回傳 電影種類 -1 上映日期 電影長度 電影圖片網址
 def get_type(time_url):
     #進到網頁拿html
     r = requests.get(time_url)
@@ -95,7 +95,7 @@ def get_type(time_url):
     info1 = soup.find_all('span')
     types = info.text.replace('\n','').replace(' ','')
     types = types.split('/')
-    
+    photo = soup.find('div', class_='movie_intro_foto').find('img')['src']
     has_imdb = 0#有無imdb
     for i in info1:
         if i.text[0:4] == 'IMDb':
@@ -107,9 +107,9 @@ def get_type(time_url):
             if i.text[0] == '片':
                 length = i.text[6:-1]+i.text[-1]
     if has_imdb:
-        return types,imdb,date,length
+        return types,imdb,date,length,photo
     else:
-        return types,-1,date,length
+        return types,-1,date,length,photo
     
 
 
@@ -129,7 +129,7 @@ for url in urlList:
     else:
         MovieInfo = MovieInfo.append(d1,ignore_index=True)
 
-
+#
 #Get schedules
 schedules = []
 for time_url in MovieInfo['time']:
@@ -143,24 +143,27 @@ for time_url in MovieInfo['time']:
     schedules.append(get_schedule(r.html))
 MovieInfo['schedule'] = schedules
 
-#爬 電影種類 imdb分數 上映日期 電影長度
+#爬 電影種類 imdb分數 上映日期 電影長度 電影圖片網址
 types = []
 imdbs = []
 dates = []
 lengths = []
+photos = []
 for time_url in MovieInfo['Web']:
-    type,imdb,date,length = get_type(time_url)
+    type,imdb,date,length,photo = get_type(time_url)
     types.append(type)
     ################################
     imdbs.append(imdb)#請注意，如果imdb為-1這代表查不到imdb
     ################################
     dates.append(date)
     lengths.append(length)
+    photos.append(photo)
 #併到dataframe
 MovieInfo['type'] = types
 MovieInfo['imdb'] = imdbs
 MovieInfo['release_date'] = dates
 MovieInfo['length'] = lengths
+MovieInfo['photo_website'] = photos#電影圖片網址
 
 
 for i in range(len(MovieInfo)):
@@ -169,6 +172,7 @@ for i in range(len(MovieInfo)):
     print(MovieInfo['imdb'][i])
     print(MovieInfo['release_date'][i])
     print(MovieInfo['length'][i])
+    print(MovieInfo['photo_website'][i])
     print()
 
 
