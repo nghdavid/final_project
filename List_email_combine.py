@@ -22,7 +22,7 @@ sheetValue = sheet.get_all_values()
 matchPartner = []
 match = 0
 for i in range(1, len(sheetValue)):
-    if newMovie[1] == sheetValue[i][1] and newMovie[2] == sheetValue[i][2]:
+    if newMovie[1] == sheetValue[i][1] and newMovie[2] == sheetValue[i][2] and newMovie[3] == sheetValue[i][3]:
         matchPartner.append(newMovie)
         matchPartner.append(sheetValue[i])
         sheet.delete_row(i + 1)
